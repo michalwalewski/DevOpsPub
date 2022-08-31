@@ -378,9 +378,9 @@ Clear-Host
 $sVM_NewNodePool_Dir="c:\nodepool"
 $sVM_Template_Path="C:\vms"
 $sVM_Template_Name="linux_alpine_template.img"
-$sVM_Template_Network_Subnet="192.168.100."
-$sVM_Template_IP="192.168.100.250"
-$sVM_New_Network_Subnet="192.168.100."
+$sVM_Template_Network_Subnet="192.168.1."
+$sVM_Template_IP="192.168.1.250"
+$sVM_New_Network_Subnet="192.168.1."
 $iAdapterNumberRangeManager=50
 $iAdapterNumberRangeWorker=60
 #$NumOfNodes=Read-Host("Enter number of VMs to deploy")
