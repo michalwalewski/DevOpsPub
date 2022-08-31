@@ -5,6 +5,4 @@ Remove-Item -Recurse -Force C:\nodepool
 
 & "C:\Program Files\TAP-Windows\bin\tapinstall.exe" install "C:\Program Files\TAP-Windows\driver\OemVista.inf" tap0901 -ErrorAction Stop -ErrorVariable SearchError
 
-Write-Host "[SUCCESS] Tap Virtual Network Adapter installed successfully.`r" -ForegroundColor Green
-Rename-NetAdapter -Name "Ethernet 2" -NewName "GBET_VPN"
 Write-Host "Completed" -ForegroundColor Green
