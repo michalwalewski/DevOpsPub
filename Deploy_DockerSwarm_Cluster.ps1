@@ -193,6 +193,8 @@ function New-DockerSwarm-Create
     Write-Debug "iVM_Number: $iVM_Number`r"
 
     Write-Host "[START] Powering on VM: vm-$sNodeType$iVM_Number`r" -ForegroundColor Green
+    Write-Verbose "[SETTING] Adding vm-$sNodeType$iVM_Number to start script.`r"
+    Write-Output "Start-Process 'C:\Program Files\qemu\qemu-system-x86_64.exe' -ArgumentList `"-hda $sVM_NewNodePool_Dir\vm-$sNodeType$iVM_Number.img -m 512 -machine type=q35 -device intel-iommu,intremap=on -smp 1,cores=1,threads=1,sockets=1 -netdev tap,id=mynet0,ifname=vEth-$sNodeType$iIP_Last_Octet -net nic,model=e1000,netdev=mynet0,macaddr=52:55:00:d1:55:$iIP_Last_Octet -vga std -boot strict=on -accel hax `" -WindowStyle Minimized" >> $sVM_NewNodePool_Dir\Start_VMs.ps1
     Start-Process 'C:\Program Files\qemu\qemu-system-x86_64.exe' -ArgumentList "-hda $sVM_NewNodePool_Dir\vm-$sNodeType$iVM_Number.img -m 512 -machine type=q35 -device intel-iommu,intremap=on -smp 1,cores=1,threads=1,sockets=1 -netdev tap,id=mynet0,ifname=vEth-$sNodeType$iIP_Last_Octet -net nic,model=e1000,netdev=mynet0,macaddr=52:55:00:d1:55:$iIP_Last_Octet -vga std -boot strict=on -accel hax " -WindowStyle Minimized
     
     #Verify current IP 
@@ -281,6 +283,8 @@ function Set-DockerNode-Type
     Write-Debug "iVM_Number: $iVM_Number`r"
 
     Write-Host "[START] Powering on VM: vm-$sNodeType$iVM_Number`r" -ForegroundColor Green
+    Write-Verbose "[SETTING] Adding vm-$sNodeType$iVM_Number to start script.`r"
+    Write-Output "Start-Process 'C:\Program Files\qemu\qemu-system-x86_64.exe' -ArgumentList `"-hda $sVM_NewNodePool_Dir\vm-$sNodeType$iVM_Number.img -m 512 -machine type=q35 -device intel-iommu,intremap=on -smp 1,cores=1,threads=1,sockets=1 -netdev tap,id=mynet0,ifname=vEth-$sNodeType$iIP_Last_Octet -net nic,model=e1000,netdev=mynet0,macaddr=52:55:00:d1:55:$iIP_Last_Octet -vga std -boot strict=on -accel hax `" -WindowStyle Minimized" >> $sVM_NewNodePool_Dir\Start_VMs.ps1
     Start-Process 'C:\Program Files\qemu\qemu-system-x86_64.exe' -ArgumentList "-hda $sVM_NewNodePool_Dir\vm-$sNodeType$iVM_Number.img -m 512 -machine type=q35 -device intel-iommu,intremap=on -smp 1,cores=1,threads=1,sockets=1 -netdev tap,id=mynet0,ifname=vEth-$sNodeType$iIP_Last_Octet -net nic,model=e1000,netdev=mynet0,macaddr=52:55:00:d1:55:$iIP_Last_Octet -vga std -boot strict=on -accel hax " -WindowStyle Minimized
     
     #Verify current IP 
@@ -364,6 +368,11 @@ function Set-DockerNode-Type
             Write-Verbose "[FAILED] vm-$sNodeType$iVM_Number failed to join Docker Swarm at $iAttempt attempt.`r"
         }
     }
+    
+    if ($sNodeType -like "worker") {
+        Write-Verbose "[SETTING] Applying Node Label`r"
+        ssh -o StrictHostKeyChecking=accept-new root@$sManager_Node_IP -t "docker node update --label-add application=yes vm-$sNodeType$iVM_Number"
+    }
 
     Write-Host "[COMPLETE] vm-$sNodeType$iVM_Number Configuration & Deployment Finished.`r" -ForegroundColor Green
 
@@ -385,7 +394,7 @@ $iAdapterNumberRangeManager=50
 $iAdapterNumberRangeWorker=60
 #$NumOfNodes=Read-Host("Enter number of VMs to deploy")
 $NumOfManagerNodes=3
-$NumOfWorkerNodes=5
+$NumOfWorkerNodes=9
 
 Write-Debug "NumOfManagerNodes: $NumOfManagerNodes`r"
 Write-Debug "NumOfWorkerNodes: $NumOfWorkerNodes`r"
