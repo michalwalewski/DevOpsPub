@@ -394,7 +394,7 @@ $iAdapterNumberRangeManager=50
 $iAdapterNumberRangeWorker=60
 #$NumOfNodes=Read-Host("Enter number of VMs to deploy")
 $NumOfManagerNodes=3
-$NumOfWorkerNodes=9
+$NumOfWorkerNodes=5
 
 Write-Debug "NumOfManagerNodes: $NumOfManagerNodes`r"
 Write-Debug "NumOfWorkerNodes: $NumOfWorkerNodes`r"
